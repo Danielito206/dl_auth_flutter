@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:twitter_login/twitter_login.dart';
+//import 'package:twitter_login/twitter_login.dart';
 
 class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,7 +42,8 @@ class AuthController {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null;
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -54,7 +55,16 @@ class AuthController {
     }
   }
 
-  Future<UserCredential?> signInWithTwitter() async {
+  Future<void> signInWithTwitter() async {
+    try {
+      TwitterAuthProvider twitterProvider = TwitterAuthProvider();
+      await _auth.signInWithProvider(twitterProvider);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /*Future<UserCredential?> signInWithTwitter() async {
     try {
       final twitterLogin = TwitterLogin(
         apiKey: 'GmANeLThfVRqYDY4xRPi09yqp',
@@ -62,20 +72,20 @@ class AuthController {
         redirectURI: 'https://clstapp-f1cd7.firebaseapp.com/__/auth/handler',
         //'twitterkit-GmANeLThfVRqYDY4xRPi09yqp://',
       );
-      
+
       final authResult = await twitterLogin.login();
       if (authResult.authToken == null) return null;
-      
+
       final twitterAuthCredential = TwitterAuthProvider.credential(
         accessToken: authResult.authToken!,
         secret: authResult.authTokenSecret!,
       );
-      
+
       return await _auth.signInWithCredential(twitterAuthCredential);
     } catch (e) {
       throw e.toString();
     }
-  }
+  }*/
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();
