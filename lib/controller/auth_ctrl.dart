@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,28 +39,28 @@ class AuthController {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      print('Début connexion Google...');
+      debugPrint('Début connexion Google...');
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        print('Utilisateur a annulé la connexion Google');
+        debugPrint('Utilisateur a annulé la connexion Google');
         throw 'Connexion Google annulée';
       }
 
-      print('Utilisateur Google récupéré: ${googleUser.email}');
+      debugPrint('Utilisateur Google récupéré: ${googleUser.email}');
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       
-      print('Tokens récupérés - AccessToken: ${googleAuth.accessToken != null}, IdToken: ${googleAuth.idToken != null}');
+      debugPrint('Tokens récupérés - AccessToken: ${googleAuth.accessToken != null}, IdToken: ${googleAuth.idToken != null}');
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      print('Tentative de connexion Firebase...');
+      debugPrint('Tentative de connexion Firebase...');
       final result = await _auth.signInWithCredential(credential);
-      print('Connexion Google réussie!');
+      debugPrint('Connexion Google réussie!');
       return result;
     } catch (e) {
-      print('Erreur Google Sign-In: $e');
+      debugPrint('Erreur Google Sign-In: $e');
       if (e.toString().contains('popup_closed')) {
         throw 'Connexion Google annulée';
       }
@@ -69,13 +70,13 @@ class AuthController {
 
   Future<UserCredential?> signInWithTwitter() async {
     try {
-      print('Début connexion Twitter...');
+      debugPrint('Début connexion Twitter...');
       TwitterAuthProvider twitterProvider = TwitterAuthProvider();
       final result = await _auth.signInWithProvider(twitterProvider);
-      print('Connexion Twitter réussie!');
+      debugPrint('Connexion Twitter réussie!');
       return result;
     } catch (e) {
-      print('Erreur Twitter Sign-In: $e');
+      debugPrint('Erreur Twitter Sign-In: $e');
       throw 'Erreur de connexion Twitter: $e';
     }
   }
