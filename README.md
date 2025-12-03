@@ -1,6 +1,5 @@
 # clstapp
 
-A new Flutter project.
 LES CONNEXIONS (TWITTER ET GOOGLE) NE MARCHENT QU'AVEC ANDROID MAIS PAS LE WEB.
 Mais l'application compile et marche sut toutes les plateformes
 ## Getting Started
